@@ -1,26 +1,55 @@
-name: Deploy to VPS
+name: Deploy AstroJS
 
 on:
   push:
     branches:
       - main
 
+  workflow_dispatch:
+
 jobs:
+
   deploy:
+
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
+
+      - name: Deploy on Ubuntu server
+        uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_DEPLOY_KEY }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+
           script: |
-            cd /var/www/TP6-R314
-            git pull origin main
-            bun install
+            set -e
+
+            echo "======================================"
+            echo "Début du déploiement"
+            echo "======================================"
+
+            cd /var/www/TP6-R314/
+
+            echo "Mise à jour du code..."
+            git pull origin
+            
+            echo "Installation des dépendances..."
+            bun ci
+
+            echo "Compilation Astro..."
             bun run --bun build
-            sudo systemctl restart tp6-r314
+
+            echo "Redémarrage de l'application..."
+            sudo systemctl restart clients
+
+            echo "Vérification du service..."
+            sudo systemctl status clients
+
+            echo "Health check..."
+            curl --fail http://localhost:3000/
+
+            echo "======================================"
+            echo "Déploiement terminé"
+            echo "======================================"
