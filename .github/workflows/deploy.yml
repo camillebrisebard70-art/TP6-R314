@@ -42,10 +42,10 @@ jobs:
             /home/etudiant/.bun/bin/bun run --bun build
 
             echo "Redémarrage de l'application..."
-            sudo systemctl restart clients
+            sudo systemctl restart tp6-r314
 
             echo "Vérification du service..."
-            sudo systemctl status clients
+            sudo systemctl status tp6-r314
 
             echo "Health check..."
             curl --fail http://localhost:3000/
