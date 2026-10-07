@@ -23,4 +23,4 @@ jobs:
             git pull origin main
             bun install
             bun run build
-            sudo systemctl restart clients-app
+            sudo systemctl restart tp6-r314
