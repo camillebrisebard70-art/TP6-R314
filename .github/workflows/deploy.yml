@@ -33,10 +33,10 @@ jobs:
             cd /var/www/TP6-R314/
 
             echo "Mise à jour du code..."
-            git pull origin
-            
+            git pull origin main
+
             echo "Installation des dépendances..."
-            /home/etudiant/.bun/bin/bun ci
+            /home/etudiant/.bun/bin/bun install --frozen-lockfile
 
             echo "Compilation Astro..."
             /home/etudiant/.bun/bin/bun run --bun build
