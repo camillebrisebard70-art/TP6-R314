@@ -1,5 +1,8 @@
 ---
 import { getClients } from "../lib/db.js";
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
 
 const clients = getClients();
 
@@ -469,7 +472,22 @@ const locationsCount = clients.filter(
       </div>
     </div>
 
+    <div class="user-area">
+      {session ? (
+        <>
+          <div class="user-info">
+            <div class="user-name">{session.user?.name}</div>
+            <div class="user-email">{session.user?.email}</div>
+          </div>
+          <a href="/api/auth/signout" class="logout">Se déconnecter</a>
+        </>
+      ) : (
+        <a href="/api/auth/signin" class="logout">Se connecter avec Google</a>
+      )}
+    </div>
+
   </header>
+
   <main>
 
     <!-- INTRODUCTION -->
@@ -485,7 +503,6 @@ const locationsCount = clients.filter(
       </p>
 
     </section>
-
 
     <!-- STATISTIQUES -->
 
@@ -509,7 +526,6 @@ const locationsCount = clients.filter(
 
       </div>
 
-
       <div class="stat-card">
 
         <div class="stat-icon">
@@ -527,7 +543,6 @@ const locationsCount = clients.filter(
         </div>
 
       </div>
-
 
       <div class="stat-card">
 
@@ -548,7 +563,6 @@ const locationsCount = clients.filter(
       </div>
 
     </section>
-
 
     <!-- MAP -->
 
@@ -579,7 +593,6 @@ const locationsCount = clients.filter(
 
     </section>
 
-
     <!-- CLIENTS -->
 
     <section class="clients-card">
@@ -595,7 +608,6 @@ const locationsCount = clients.filter(
         </div>
 
       </div>
-
 
       <div class="clients-table-wrapper">
 
@@ -666,14 +678,12 @@ const locationsCount = clients.filter(
 
   </main>
 
-
   <!-- LEAFLET -->
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     crossorigin=""
   ></script>
-
 
   <script define:vars={{ clients }}>
 
@@ -690,7 +700,6 @@ const locationsCount = clients.filter(
       scrollWheelZoom: true
     });
 
-
     /*
      * Fond OpenStreetMap
      */
@@ -703,13 +712,11 @@ const locationsCount = clients.filter(
       }
     ).addTo(map);
 
-
     /*
      * Tableau des coordonnées.
      */
 
     const bounds = [];
-
 
     /*
      * Création des marqueurs.
@@ -720,7 +727,6 @@ const locationsCount = clients.filter(
       const latitude = Number(client.latitude);
       const longitude = Number(client.longitude);
 
-
       if (
         !Number.isFinite(latitude) ||
         !Number.isFinite(longitude)
@@ -728,15 +734,12 @@ const locationsCount = clients.filter(
         return;
       }
 
-
       const position = [
         latitude,
         longitude
       ];
 
-
       bounds.push(position);
-
 
       const popup = `
         <div class="popup-title">
@@ -752,18 +755,14 @@ const locationsCount = clients.filter(
         </div>
       `;
 
-
       L.marker(position)
         .addTo(map)
         .bindPopup(popup);
 
     });
 
-
     /*
      * Ajustement automatique de la carte.
-     *
-     * padding ajoute une marge autour des marqueurs.
      */
 
     if (bounds.length === 1) {
@@ -797,7 +796,6 @@ const locationsCount = clients.filter(
 
     }
 
-
     /*
      * Protection minimale contre l'injection HTML
      * dans les informations des clients.
@@ -806,10 +804,10 @@ const locationsCount = clients.filter(
     function escapeHtml(value) {
 
       return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
+        .replaceAll("&", "&")
+        .replaceAll("<", "<")
+        .replaceAll(">", ">")
+        .replaceAll('"', '"')
         .replaceAll("'", "&#039;");
 
     }

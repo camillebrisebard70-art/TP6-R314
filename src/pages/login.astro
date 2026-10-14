@@ -1,0 +1,21 @@
+---
+import '../styles/app.css';
+---
+
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Connexion</title>
+  </head>
+  <body>
+    <main class="login-page">
+      <div class="panel login-card">
+        <h1>Connexion</h1>
+        <form method="POST" action="/api/auth/signin/google">
+          <button type="submit" class="btn-google">Se connecter avec Google</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

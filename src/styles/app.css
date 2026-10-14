@@ -67,3 +67,37 @@ th, td {
 th {
   background: #f1f3f4;
 }
+
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.login-card h1 {
+  margin: 0 0 25px;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-google:hover {
+  background: #1765cc;
+}

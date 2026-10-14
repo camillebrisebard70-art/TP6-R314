@@ -1,9 +1,8 @@
-import Database from "bun:sqlite"
-import { mkdirSync } from "node:fs";
+import Database from "better-sqlite3";
+import path from "node:path";
 
-mkdirSync("./data", { recursive: true });
-
-const db = new Database("./data/clients.db");
+const dbPath = path.resolve("data/clients.db");
+const db = new Database(dbPath);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS clients (

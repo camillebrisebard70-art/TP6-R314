@@ -1,19 +1,16 @@
-import { Database } from "bun:sqlite";
-import { fileURLToPath } from "node:url";
-import { dirname, join , resolve} from "node:path";
-import { mkdirSync } from "node:fs";  
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import Database from "better-sqlite3";
+import { dirname, resolve } from "node:path";
+import { mkdirSync } from "node:fs";
 
 const dbPath = resolve(
-  import.meta.env.SQLITE_DB_PATH || "./data/clients.db"
+  process.env.SQLITE_DB_PATH || "./data/clients.db"
 );
 mkdirSync(dirname(dbPath), { recursive: true });
 
 const db = new Database(dbPath);
 
 export function getClients() {
-  return db.query(`
+  return db.prepare(`
     SELECT
       id,
       name,
